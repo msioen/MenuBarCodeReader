@@ -1,0 +1,99 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{08A10750-3BD7-42F0-B39D-5BB5433EF87C}</ProjectGuid>
+    <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MenuBarCodeReader</RootNamespace>
+    <AssemblyName>MenuBarCodeReader</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
+    <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CodeSigningKey>Mac Developer</CodeSigningKey>
+    <CreatePackage>false</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <UseSGen>true</UseSGen>
+    <UseRefCounting>true</UseRefCounting>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>true</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>true</IncludeMonoRuntime>
+    <UseSGen>true</UseSGen>
+    <UseRefCounting>true</UseRefCounting>
+    <LinkMode>SdkOnly</LinkMode>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.Mac" />
+    <Reference Include="ZXingObjC.OSX.Binding">
+      <HintPath>..\packages\ZXingObjC.OSX.Binding.3.2.2.1\lib\xamarinmac20\ZXingObjC.OSX.Binding.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-256.png" />
+    <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\StatusBarIcon-16.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\StatusBarIcon-32.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\StatusBarIcon-64.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\StatusBarIcon-128png.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\StatusBarIcon-256.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\StatusBarIcon-512.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\StatusBarIcon-1024.png" />
+    <ImageAsset Include="Assets.xcassets\StatusBarIcon.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\StatusBarIcon.imageset\StatusBarIcon.png" />
+    <ImageAsset Include="Assets.xcassets\StatusBarIcon.imageset\StatusBarIcon%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="Assets.xcassets\StatusBarIcon.imageset\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+    <None Include="Entitlements.plist" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AppDelegate.cs" />
+    <Compile Include="ScanWindow.cs" />
+    <Compile Include="ScanWindow.designer.cs">
+      <DependentUpon>ScanWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ScanWindowController.cs" />
+    <Compile Include="ScanWindowController.designer.cs">
+      <DependentUpon>ScanWindowController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ScanView.cs" />
+    <Compile Include="ScanView.designer.cs">
+      <DependentUpon>ScanView.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <InterfaceDefinition Include="ScanWindow.xib" />
+    <InterfaceDefinition Include="ScanView.xib" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
+</Project>
