@@ -36,7 +36,7 @@ namespace MenuBarCodeReader
         #endregion
     }
 
-    public partial class ScanWindow : BorderlessWindow
+    public partial class ScanWindow : NSWindow
     {
         #region Constructors
 
@@ -64,19 +64,7 @@ namespace MenuBarCodeReader
 
             SetFrame(NSScreen.MainScreen.Frame, true);
 
-            // TODO - window/view doesn't automatically get focus => fix
             MakeKeyAndOrderFront(this);
-        }
-
-        public override void KeyDown(NSEvent theEvent)
-        {
-            if (theEvent.KeyCode == 53)
-            {
-                Close();
-                return;
-            }
-
-            base.KeyDown(theEvent);
         }
 
         #endregion
