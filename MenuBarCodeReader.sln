@@ -14,4 +14,12 @@ Global
 		{08A10750-3BD7-42F0-B39D-5BB5433EF87C}.Release|x86.ActiveCfg = Release|x86
 		{08A10750-3BD7-42F0-B39D-5BB5433EF87C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.VersionControlPolicy = $2
+		description = A small mac utility to quickly scan QR codes (or other bar codes) which are visible on your screen.
+		version = 1.0
+	EndGlobalSection
 EndGlobal
