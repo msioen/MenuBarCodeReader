@@ -1,24 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Foundation;
-using AppKit;
-using CoreGraphics;
-using System.Runtime.InteropServices;
 using System.IO;
+using System.Runtime.InteropServices;
+using AppKit;
+using CoreAnimation;
+using CoreGraphics;
+using Foundation;
 using ImageIO;
 using MobileCoreServices;
-using ObjCRuntime;
+using ZXingObjC.OSX.Binding;
 
 namespace MenuBarCodeReader
 {
     public partial class ScanView : AppKit.NSView
     {
-        [DllImport(Constants.CoreGraphicsLibrary)]
+        [DllImport(ObjCRuntime.Constants.CoreGraphicsLibrary)]
         static extern IntPtr CGWindowListCreateImage(CGRect screenBounds, CGWindowListOption windowOption, uint windowID, CGWindowImageOption imageOption);
+
+        const string KEYPATH_BACKGROUNDCOLOR = "backgroundColor";
+
+        static CGColor _red = new CGColor(0.86f, 0.14f, 0f, 0.7f);
+        static CGColor _green = new CGColor(0.04f, 0.4f, 0.11f, 0.7f);
 
         CGPoint? _startLocation;
         CGPoint? _endLocation;
+
+        bool _selecting = true;
 
         #region Constructors
 
@@ -38,6 +44,7 @@ namespace MenuBarCodeReader
         // Shared initialization code
         void Initialize()
         {
+            WantsLayer = true;
         }
 
         #endregion
@@ -65,11 +72,12 @@ namespace MenuBarCodeReader
             _startLocation = null;
             _endLocation = null;
 
+            _selecting = false;
+
             NeedsDisplay = true;
             DisplayIfNeeded();
 
             Scan(bounds);
-            Window.Close();
         }
 
         public override void MouseDragged(NSEvent theEvent)
@@ -84,14 +92,23 @@ namespace MenuBarCodeReader
 
         public override void DrawRect(CGRect dirtyRect)
         {
-            if (_startLocation.HasValue && _endLocation.HasValue)
+            if (_selecting)
             {
-                var path = NSBezierPath.FromRect(BuildRect(_startLocation.Value, _endLocation.Value));
-                NSColor.Blue.SetStroke();
+                var bgPath = NSBezierPath.FromRect(Bounds);
+
+                if (_startLocation.HasValue && _endLocation.HasValue)
+                {
+                    var path = NSBezierPath.FromRect(BuildRect(_startLocation.Value, _endLocation.Value));
+                    path = path.BezierPathByReversingPath();
+                    bgPath.AppendPath(path);
+
+                    NSColor.Black.SetStroke();
+                    path.LineWidth = 1;
+                    path.Stroke();
+                }
+
                 NSColor.Gray.ColorWithAlphaComponent(0.2f).SetFill();
-                path.LineWidth = 1;
-                path.Fill();
-                path.Stroke();
+                bgPath.Fill();
             }
 
             base.DrawRect(dirtyRect);
@@ -132,21 +149,79 @@ namespace MenuBarCodeReader
 
         void Scan(CGRect bounds)
         {
-            bounds = Window.ConvertRectToScreen(bounds);
-            bounds = CGRectFlipped(bounds, NSScreen.MainScreen.Frame);
+            var screenBounds = Window.ConvertRectToScreen(bounds);
+            screenBounds = CGRectFlipped(screenBounds, NSScreen.MainScreen.Frame);
 
-            IntPtr imageRef = CGWindowListCreateImage(bounds, CGWindowListOption.OnScreenBelowWindow, (uint)Window.WindowNumber, CGWindowImageOption.Default);
+            IntPtr imageRef = CGWindowListCreateImage(screenBounds, CGWindowListOption.OnScreenBelowWindow, (uint)Window.WindowNumber, CGWindowImageOption.Default);
             var cgImage = new CGImage(imageRef);
 
-            // tmp storing of image
+            //DebugHelperSaveImageToDisk(cgImage);
+
+            var scanResults = DecodeImage(cgImage);
+            if (scanResults != null)
+            {
+                // we scanned something => paste to clipboard
+                NSPasteboard.GeneralPasteboard.ClearContents();
+                NSPasteboard.GeneralPasteboard.SetStringForType(scanResults, NSPasteboard.NSPasteboardTypeString);
+
+                AnimateBackgroundAndClose(bounds, _green);
+            }
+            else
+            {
+                // nothing scanned
+                AnimateBackgroundAndClose(bounds, _red);
+            }
+        }
+
+        void AnimateBackgroundAndClose(CGRect bounds, CGColor color)
+        {
+            var view = new NSView(bounds);
+            view.WantsLayer = true;
+            AddSubview(view);
+
+            var animation = CABasicAnimation.FromKeyPath(KEYPATH_BACKGROUNDCOLOR);
+            animation.From = FromObject(view.Layer.BackgroundColor);
+            animation.To = FromObject(color);
+            animation.TimingFunction = CAMediaTimingFunction.FromName(CAMediaTimingFunction.EaseInEaseOut);
+            animation.Duration = 0.2;
+            animation.AutoReverses = true;
+            animation.AnimationStopped += Animation_AnimationStopped;
+
+            view.Layer.AddAnimation(animation, KEYPATH_BACKGROUNDCOLOR);
+        }
+
+        void Animation_AnimationStopped(object sender, CAAnimationStateEventArgs e)
+        {
+            Window.Close();
+        }
+
+        string DecodeImage(CGImage imageToDecode)
+        {
+            var source = new ZXCGImageLuminanceSource(imageToDecode);
+            var bitmap = ZXBinaryBitmap.BinaryBitmapWithBinarizer(ZXHybridBinarizer.BinarizerWithSource(source));
+
+            NSError error;
+            var hints = new ZXDecodeHints();
+            var reader = new ZXMultiFormatReader();
+            var result = reader.Decode(bitmap, hints, out error);
+
+            if (result != null)
+            {
+                return result.Text;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        static void DebugHelperSaveImageToDisk(CGImage cgImage)
+        {
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "scanned.png");
             var fileURL = new NSUrl(filePath, false);
             var imageDestination = CGImageDestination.Create(fileURL, UTType.PNG, 1);
             imageDestination.AddImage(cgImage);
             imageDestination.Close();
-
-
-            // TODO animate background color based on result
         }
 
         #endregion

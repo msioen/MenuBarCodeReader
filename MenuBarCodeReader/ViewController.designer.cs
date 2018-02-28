@@ -9,18 +9,12 @@ using System.CodeDom.Compiler;
 
 namespace MenuBarCodeReader
 {
-	[Register ("ScanWindowController")]
-	partial class ScanWindowController
+	[Register ("ViewController")]
+	partial class ViewController
 	{
-		[Outlet]
-		MenuBarCodeReader.ScanView scanView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (scanView != null) {
-				scanView.Dispose ();
-				scanView = null;
-			}
 		}
 	}
 }

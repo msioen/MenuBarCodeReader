@@ -7,6 +7,21 @@ namespace MenuBarCodeReader
 {
     public partial class ScanWindowController : NSWindowController
     {
+        public const string NOTIFICATION_CLOSE = "notificationClose";
+
+        NSObject _closeObserver;
+
+        #region Properties
+
+        public new ScanWindow Window
+        {
+            get { return (ScanWindow)base.Window; }
+        }
+
+        #endregion
+
+        #region Constructors
+
         public ScanWindowController(IntPtr handle) : base(handle)
         {
         }
@@ -20,14 +35,31 @@ namespace MenuBarCodeReader
         {
         }
 
+        #endregion
+
+        #region Public
+
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
+
+            _closeObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString(NOTIFICATION_CLOSE), OnCloseRequested);
         }
 
-        public new ScanWindow Window
+        public override void Close()
         {
-            get { return (ScanWindow)base.Window; }
+            if (_closeObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(_closeObserver);
+            }
+            base.Close();
         }
+
+        public void OnCloseRequested(NSNotification notification)
+        {
+            Close();
+        }
+
+        #endregion
     }
 }

@@ -50,6 +50,9 @@
     <Reference Include="ZXingObjC.OSX.Binding">
       <HintPath>..\packages\ZXingObjC.OSX.Binding.3.2.2.1\lib\xamarinmac20\ZXingObjC.OSX.Binding.dll</HintPath>
     </Reference>
+    <Reference Include="HotKeyManager.Binding">
+      <HintPath>..\packages\HotKeyManager.Binding.1.0.1\lib\xamarinmac20\HotKeyManager.Binding.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -90,10 +93,15 @@
     <Compile Include="ScanView.designer.cs">
       <DependentUpon>ScanView.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewController.cs" />
+    <Compile Include="ViewController.designer.cs">
+      <DependentUpon>ViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="ScanWindow.xib" />
     <InterfaceDefinition Include="ScanView.xib" />
+    <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>

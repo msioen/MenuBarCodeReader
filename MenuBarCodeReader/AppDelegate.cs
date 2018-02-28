@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using AppKit;
+using CoreGraphics;
 using Foundation;
+using HotKeyManager;
 
 namespace MenuBarCodeReader
 {
@@ -8,6 +11,9 @@ namespace MenuBarCodeReader
     public class AppDelegate : NSApplicationDelegate
     {
         NSStatusItem _statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem(NSStatusItemLength.Square);
+
+        JFHotkeyManager _hotkeyManager;
+        List<nuint> _hotkeyBindings = new List<nuint>();
 
         public AppDelegate()
         {
@@ -17,34 +23,70 @@ namespace MenuBarCodeReader
         {
             _statusItem.Button.Image = NSImage.ImageNamed("StatusBarIcon");
             ConstructMenu();
+            SetupHotKeys();
         }
 
         public override void WillTerminate(NSNotification notification)
         {
-            // Insert code here to tear down your application
+            foreach (var keyBinding in _hotkeyBindings)
+            {
+                _hotkeyManager.Unbind(keyBinding);
+            }
         }
 
         void ConstructMenu()
         {
             var menu = new NSMenu();
 
-            // TODO - look into 'global' hotkeys
-            menu.AddItem(new NSMenuItem("Scan", OnScan));
-            menu.AddItem(new NSMenuItem("Preferences", OnPreferences));
+            menu.AddItem(new NSMenuItem("Scan", OnScan)
+            {
+                KeyEquivalent = "b",
+                KeyEquivalentModifierMask = NSEventModifierMask.CommandKeyMask | NSEventModifierMask.ShiftKeyMask
+            });
             menu.AddItem(NSMenuItem.SeparatorItem);
+            //menu.AddItem(new NSMenuItem("Preferences", OnPreferences)); // TODO
+            //menu.AddItem(new NSMenuItem("Check for updates", OnCheckForUpdates)); // TODO
             menu.AddItem(new NSMenuItem("Quit", OnQuit));
             _statusItem.Menu = menu;
         }
 
-        void OnScan(object sender, EventArgs e)
+        void SetupHotKeys()
+        {
+            _hotkeyManager = new JFHotkeyManager();
+
+            // escape hotkey should stop scan selection
+            _hotkeyBindings.Add(_hotkeyManager.BindKeyRef(53, 0, this, new ObjCRuntime.Selector("onEscape")));
+
+            // command shift b should start scanning
+            _hotkeyBindings.Add(_hotkeyManager.BindKeyRef(11, (uint)(EModifierKeys.CmdKey | EModifierKeys.ShiftKey), this, new ObjCRuntime.Selector("onScan")));
+        }
+
+        [Export("onEscape")]
+        void OnEscape()
+        {
+            NSNotificationCenter.DefaultCenter.PostNotificationName(ScanWindowController.NOTIFICATION_CLOSE, null);
+        }
+
+        [Export("onScan")]
+        void OnScan()
         {
             var scanWindowController = new ScanWindowController();
             scanWindowController.ShowWindow(this);
         }
 
+        void OnScan(object sender, EventArgs e)
+        {
+            OnScan();
+        }
+
         void OnPreferences(object sender, EventArgs e)
         {
             // TODO => preference window
+        }
+
+        void OnCheckForUpdates(object sender, EventArgs e)
+        {
+            // TODO => check for updates
         }
 
         void OnQuit(object sender, EventArgs e)
