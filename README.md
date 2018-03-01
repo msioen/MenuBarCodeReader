@@ -1,6 +1,10 @@
 # MenuBarCodeReader
 
-This is a small mac utility to quickly scan QR codes (or other bar codes) which are visible on your screen. The app nests itself in your status bar from where you can scanning. On succesful scans the parsed data is available on your clipboard.
+This is a small mac utility to quickly and seamlessly scan QR codes (or other bar codes) which are visible on your screen. The app nests itself in your menu bar. On succesful scans the parsed data is available on your clipboard.
+
+
+![Demo](demo.gif)
+
 
 ### Roadmap
 
