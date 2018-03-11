@@ -32,5 +32,9 @@
 	<string>public.app-category.utilities</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
+	<key>SUFeedURL</key>
+	<string>https://github.com/msioen/MenuBarCodeReader/tree/master/release/appcast.xml</string>
 </dict>
 </plist>

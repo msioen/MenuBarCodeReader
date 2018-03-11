@@ -45,7 +45,7 @@ namespace MenuBarCodeReader
             });
             menu.AddItem(NSMenuItem.SeparatorItem);
             //menu.AddItem(new NSMenuItem("Preferences", OnPreferences)); // TODO
-            //menu.AddItem(new NSMenuItem("Check for updates", OnCheckForUpdates)); // TODO
+            menu.AddItem(new NSMenuItem("Check for updates", OnCheckForUpdates));
             menu.AddItem(new NSMenuItem("Quit", OnQuit));
             _statusItem.Menu = menu;
         }
@@ -86,7 +86,8 @@ namespace MenuBarCodeReader
 
         void OnCheckForUpdates(object sender, EventArgs e)
         {
-            // TODO => check for updates
+            var updater = new Sparkle.SUUpdater();
+            updater.CheckForUpdates(this);
         }
 
         void OnQuit(object sender, EventArgs e)

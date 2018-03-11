@@ -54,6 +54,9 @@
     <Reference Include="HotKeyManager.Binding">
       <HintPath>..\packages\HotKeyManager.Binding.1.0.1\lib\xamarinmac20\HotKeyManager.Binding.dll</HintPath>
     </Reference>
+    <Reference Include="Sparkle">
+      <HintPath>..\libraries\Sparkle.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -103,6 +106,9 @@
     <InterfaceDefinition Include="ScanWindow.xib" />
     <InterfaceDefinition Include="ScanView.xib" />
     <InterfaceDefinition Include="Main.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="dsa_pub.pem" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
