@@ -21,6 +21,10 @@ namespace MenuBarCodeReader
 
         public override void DidFinishLaunching(NSNotification notification)
         {
+            // check if we're running from the Applications folder (to make Sparkle work properly)
+            LetsMove.CFunctions.PFMoveToApplicationsFolderIfNecessary();
+
+            // setup menu
             _statusItem.Button.Image = NSImage.ImageNamed("StatusBarIcon");
             ConstructMenu();
             SetupHotKeys();

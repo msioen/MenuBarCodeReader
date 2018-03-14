@@ -57,6 +57,9 @@
     <Reference Include="Sparkle">
       <HintPath>..\libraries\Sparkle.dll</HintPath>
     </Reference>
+    <Reference Include="LetsMove.Binding">
+      <HintPath>..\packages\LetsMove.Binding.1.24.1\lib\xamarinmac20\LetsMove.Binding.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />

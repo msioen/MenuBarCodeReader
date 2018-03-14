@@ -17,3 +17,4 @@ AppPackages/
 TestResult.xml
 Resource.designer.cs
 build
+.vs
