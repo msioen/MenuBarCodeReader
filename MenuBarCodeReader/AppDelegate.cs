@@ -8,6 +8,12 @@ using PTHotKey;
 
 namespace MenuBarCodeReader
 {
+    public enum EScanMode
+    {
+        Select,
+        Click
+    }
+
     [Register("AppDelegate")]
     public class AppDelegate : NSApplicationDelegate
     {
@@ -19,14 +25,8 @@ namespace MenuBarCodeReader
         public AppDelegate()
         {
             var defaultValues = new NSMutableDictionary();
-            var defaultScanSelect = new NSMutableDictionary();
-
-            defaultScanSelect.SetValueForKey(new NSString("b"), new NSString("characters"));
-            defaultScanSelect.SetValueForKey(new NSString("B"), new NSString("charactersIgnoringModifiers"));
-            defaultScanSelect.SetValueForKey(new NSNumber(11), new NSString("keyCode"));
-            defaultScanSelect.SetValueForKey(new NSNumber((ulong)(NSEventModifierMask.CommandKeyMask | NSEventModifierMask.ShiftKeyMask)), new NSString("modifierFlags"));
-
-            defaultValues.SetValueForKey(defaultScanSelect, Constants.VALUE_HOTKEY_SCAN_SELECT);
+            SetupDefaultHotKey(Constants.VALUE_HOTKEY_SCAN_SELECT, defaultValues, "b", 11, NSEventModifierMask.CommandKeyMask | NSEventModifierMask.ShiftKeyMask);
+            SetupDefaultHotKey(Constants.VALUE_HOTKEY_SCAN_CLICK, defaultValues, "c", 8, NSEventModifierMask.CommandKeyMask | NSEventModifierMask.ShiftKeyMask);
             NSUserDefaults.StandardUserDefaults.RegisterDefaults(defaultValues);
 
             NSUserDefaultsController.SharedUserDefaultsController.InitialValues = defaultValues;
@@ -55,9 +55,13 @@ namespace MenuBarCodeReader
         {
             var menu = new NSMenu();
 
-            var scanItem = new NSMenuItem("Scan", OnScan);
-            scanItem.BindHotKey(NSUserDefaultsController.SharedUserDefaultsController, Constants.KEY_HOTKEY_SCAN_SELECT);
-            menu.AddItem(scanItem);
+            var scanSelectItem = new NSMenuItem("Scan - select", OnScanSelect);
+            scanSelectItem.BindHotKey(NSUserDefaultsController.SharedUserDefaultsController, Constants.KEY_HOTKEY_SCAN_SELECT);
+            menu.AddItem(scanSelectItem);
+
+            var scanClickItem = new NSMenuItem("Scan - click", OnScanClick);
+            scanClickItem.BindHotKey(NSUserDefaultsController.SharedUserDefaultsController, Constants.KEY_HOTKEY_SCAN_CLICK);
+            menu.AddItem(scanClickItem);
 
             menu.AddItem(NSMenuItem.SeparatorItem);
             //menu.AddItem(new NSMenuItem("Preferences", OnPreferences)); // TODO
@@ -73,14 +77,19 @@ namespace MenuBarCodeReader
             // escape hotkey should stop scan selection
             _hotkeyBindings.Add(Constants.KEY_HOTKEY_ESC, _hotkeyManager.BindKeyRef(53, 0, this, new ObjCRuntime.Selector("onEscape")));
 
-            // command shift b should start scanning
             var currSelectHotKey = NSUserDefaults.StandardUserDefaults.ValueForKey(Constants.VALUE_HOTKEY_SCAN_SELECT);
             if (currSelectHotKey != null)
             {
-                UpdateGlobalHotKey(Constants.KEY_HOTKEY_SCAN_SELECT, currSelectHotKey, "onScan");
+                UpdateGlobalHotKey(Constants.KEY_HOTKEY_SCAN_SELECT, currSelectHotKey, "onScanSelect");
+            }
+            var currClickHotKey = NSUserDefaults.StandardUserDefaults.ValueForKey(Constants.VALUE_HOTKEY_SCAN_CLICK);
+            if (currClickHotKey != null)
+            {
+                UpdateGlobalHotKey(Constants.KEY_HOTKEY_SCAN_CLICK, currClickHotKey, "onScanClick");
             }
 
             NSUserDefaultsController.SharedUserDefaultsController.AddObserver(this, Constants.KEY_HOTKEY_SCAN_SELECT, NSKeyValueObservingOptions.Initial, IntPtr.Zero);
+            NSUserDefaultsController.SharedUserDefaultsController.AddObserver(this, Constants.KEY_HOTKEY_SCAN_CLICK, NSKeyValueObservingOptions.Initial, IntPtr.Zero);
         }
 
         [Export("onEscape")]
@@ -89,16 +98,33 @@ namespace MenuBarCodeReader
             NSNotificationCenter.DefaultCenter.PostNotificationName(ScanWindowController.NOTIFICATION_CLOSE, null);
         }
 
-        [Export("onScan")]
-        void OnScan()
+        [Export("onScanSelect")]
+        void OnScanSelect()
         {
-            var scanWindowController = new ScanWindowController();
-            scanWindowController.ShowWindow(this);
+            OnScan(EScanMode.Select);
         }
 
-        void OnScan(object sender, EventArgs e)
+        [Export("onScanClick")]
+        void OnScanClick()
         {
-            OnScan();
+            OnScan(EScanMode.Click);
+        }
+
+        void OnScanSelect(object sender, EventArgs e)
+        {
+            OnScanSelect();
+        }
+
+        void OnScanClick(object sender, EventArgs e)
+        {
+            OnScanClick();
+        }
+
+        void OnScan(EScanMode scanMode)
+        {
+            ScanView.ScanMode = scanMode;
+            var scanWindowController = new ScanWindowController();
+            scanWindowController.ShowWindow(this);
         }
 
         void OnPreferences(object sender, EventArgs e)
@@ -121,15 +147,23 @@ namespace MenuBarCodeReader
         {
             if (keyPath == Constants.KEY_HOTKEY_SCAN_SELECT)
             {
-                // todo update keys
-                //UpdateHotKey(keyPath, ofObject, "onScan");
                 if (_hotkeyBindings.ContainsKey(Constants.KEY_HOTKEY_SCAN_SELECT))
                 {
                     _hotkeyManager.Unbind(_hotkeyBindings[Constants.KEY_HOTKEY_SCAN_SELECT]);
                     _hotkeyBindings.Remove(Constants.KEY_HOTKEY_SCAN_SELECT);
                 }
 
-                UpdateGlobalHotKey(Constants.KEY_HOTKEY_SCAN_SELECT, ofObject.ValueForKeyPath(keyPath), "onScan");
+                UpdateGlobalHotKey(Constants.KEY_HOTKEY_SCAN_SELECT, ofObject.ValueForKeyPath(keyPath), "onScanSelect");
+            }
+            else if (keyPath == Constants.KEY_HOTKEY_SCAN_CLICK)
+            {
+                if (_hotkeyBindings.ContainsKey(Constants.KEY_HOTKEY_SCAN_CLICK))
+                {
+                    _hotkeyManager.Unbind(_hotkeyBindings[Constants.KEY_HOTKEY_SCAN_CLICK]);
+                    _hotkeyBindings.Remove(Constants.KEY_HOTKEY_SCAN_CLICK);
+                }
+
+                UpdateGlobalHotKey(Constants.KEY_HOTKEY_SCAN_CLICK, ofObject.ValueForKeyPath(keyPath), "onScanClick");
             }
             else
             {
@@ -143,6 +177,16 @@ namespace MenuBarCodeReader
             ulong keyModifiers = ((NSNumber)currSelectHotKey.ValueForKey(new NSString("modifierFlags"))).UInt64Value;
             uint keyModifiersCarbon = ShortcutRecorder.CFunctions.SRCocoaToCarbonFlags((NSEventModifierMask)keyModifiers);
             _hotkeyBindings.Add(keyPath, _hotkeyManager.BindKeyRef(keyCode, keyModifiersCarbon, this, new ObjCRuntime.Selector(selector)));
+        }
+
+        static void SetupDefaultHotKey(NSString key, NSMutableDictionary defaultValues, string character, int keyCode, NSEventModifierMask modifierFlags)
+        {
+            var defaultScanSelect = new NSMutableDictionary();
+            defaultScanSelect.SetValueForKey(new NSString(character), new NSString("characters"));
+            defaultScanSelect.SetValueForKey(new NSString(character.ToUpperInvariant()), new NSString("charactersIgnoringModifiers"));
+            defaultScanSelect.SetValueForKey(new NSNumber(keyCode), new NSString("keyCode"));
+            defaultScanSelect.SetValueForKey(new NSNumber((ulong)modifierFlags), new NSString("modifierFlags"));
+            defaultValues.SetValueForKey(defaultScanSelect, key);
         }
     }
 }

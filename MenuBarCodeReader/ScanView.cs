@@ -26,6 +26,12 @@ namespace MenuBarCodeReader
 
         bool _selecting = true;
 
+        #region Properties
+
+        public static EScanMode ScanMode { get; set; }
+
+        #endregion
+
         #region Constructors
 
         // Called when created from unmanaged code
@@ -96,7 +102,7 @@ namespace MenuBarCodeReader
             {
                 var bgPath = NSBezierPath.FromRect(Bounds);
 
-                if (_startLocation.HasValue && _endLocation.HasValue)
+                if (ScanMode == EScanMode.Select && _startLocation.HasValue && _endLocation.HasValue)
                 {
                     var path = NSBezierPath.FromRect(BuildRect(_startLocation.Value, _endLocation.Value));
                     path = path.BezierPathByReversingPath();
@@ -149,6 +155,21 @@ namespace MenuBarCodeReader
 
         void Scan(CGRect bounds)
         {
+            switch (ScanMode)
+            {
+                case EScanMode.Select:
+                    ScanSelect(bounds);
+                    break;
+                case EScanMode.Click:
+                    ScanClick(bounds);
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        void ScanSelect(CGRect bounds)
+        {
             var screenBounds = Window.ConvertRectToScreen(bounds);
             screenBounds = CGRectFlipped(screenBounds, NSScreen.MainScreen.Frame);
 
@@ -158,6 +179,29 @@ namespace MenuBarCodeReader
             //DebugHelperSaveImageToDisk(cgImage);
 
             var scanResults = DecodeImage(cgImage);
+            HandleDecodeResults(bounds, scanResults);
+        }
+
+        void ScanClick(CGRect bounds)
+        {
+            var rect = NSScreen.MainScreen.Frame;
+            rect.Width = this.Bounds.Width;
+            rect.Height = this.Bounds.Height;
+            rect.Y = 0;
+
+            IntPtr imageRef = CGWindowListCreateImage(rect, CGWindowListOption.OnScreenBelowWindow, (uint)Window.WindowNumber, CGWindowImageOption.Default);
+            var cgImage = new CGImage(imageRef);
+
+            //DebugHelperSaveImageToDisk(cgImage, "screen.png");
+
+            bounds.Inflate(50, 50);
+
+            var scanResults = DetectAndDecodeImage(cgImage, bounds);
+            HandleDecodeResults(!string.IsNullOrWhiteSpace(scanResults.output) ? scanResults.bounds : bounds, scanResults.output);
+        }
+
+        void HandleDecodeResults(CGRect bounds, string scanResults)
+        {
             if (scanResults != null)
             {
                 // we scanned something => paste to clipboard
@@ -215,13 +259,125 @@ namespace MenuBarCodeReader
             }
         }
 
-        static void DebugHelperSaveImageToDisk(CGImage cgImage)
+        (string output, CGRect bounds) DetectAndDecodeImage(CGImage imageToDecode, CGRect bounds)
         {
-            var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "scanned.png");
+            var boundsHeight = Math.Max(Bounds.Height, NSScreen.MainScreen.Frame.Height);
+
+            var source = new ZXCGImageLuminanceSource(imageToDecode);
+            var bitmap = ZXBinaryBitmap.BinaryBitmapWithBinarizer(ZXHybridBinarizer.BinarizerWithSource(source));
+
+            NSError error;
+            var matrix = bitmap.BlackMatrixWithError(out error);
+            if (matrix == null)
+                return (null, CGRect.Null);
+
+            var detector = new ZXMultiDetector(matrix);
+            var detectorResults = detector.DetectMulti(null, out error);
+            if (detectorResults == null)
+                return (null, CGRect.Null);
+
+            ZXDetectorResult bestResult = null;
+            float currDistance = float.MaxValue;
+
+            var clickRelativeX = (float)(bounds.GetMidX() / Bounds.Width * imageToDecode.Width);
+            var clickRelativeY = (float)(bounds.GetMidY() / boundsHeight * imageToDecode.Height);
+
+            foreach (var detectorResult in detectorResults)
+            {
+                foreach (var point in detectorResult.Points)
+                {
+                    var relativeX = point.X;
+                    var relativeY = imageToDecode.Height - point.Y;
+
+                    var distance = SquareDistance(clickRelativeX, clickRelativeY, relativeX, relativeY);
+                    if (distance < currDistance)
+                    {
+                        currDistance = distance;
+                        bestResult = detectorResult;
+                    }
+                }
+            }
+
+            var reader = new ZXQRCodeDecoder();
+            var result = reader.DecodeMatrix(bestResult.Bits, out error);
+
+            var x = bestResult.Points[1].X;
+            var y = bestResult.Points[1].Y;
+            var width = bestResult.Points[2].X - bestResult.Points[1].X;
+            var height = bestResult.Points[2].Y - bestResult.Points[0].Y;
+
+            var scanResult = CGRectFlipped(new CGRect(x, y, width, height), new CGRect(0, 0, imageToDecode.Width, imageToDecode.Height));
+            scanResult.Inflate(50, -50);
+
+            DebugHelperDrawScanResult(imageToDecode, clickRelativeX, clickRelativeY, scanResult);
+
+            x = (float)(scanResult.X / imageToDecode.Width * NSScreen.MainScreen.Frame.Width);
+            y = (float)((scanResult.Y + scanResult.Height) / imageToDecode.Height * boundsHeight);
+            width = (float)(scanResult.Width / imageToDecode.Width * NSScreen.MainScreen.Frame.Width);
+            height = (float)(scanResult.Height / imageToDecode.Height * boundsHeight);
+
+            var rect = new CGRect(x, y, width, height);
+
+            if (result != null)
+            {
+                return (result.Text, rect);
+            }
+            else
+            {
+                return (null, CGRect.Null);
+            }
+        }
+
+        static float SquareDistance(float x1, float y1, float x2, float y2)
+        {
+            return ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+        }
+
+        static void DebugHelperSaveImageToDisk(CGImage cgImage, string filename = "scanned.png")
+        {
+            var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), filename);
             var fileURL = new NSUrl(filePath, false);
             var imageDestination = CGImageDestination.Create(fileURL, UTType.PNG, 1);
             imageDestination.AddImage(cgImage);
             imageDestination.Close();
+        }
+
+        static void DebugHelperDrawScanResult(CGImage imageToDecode, float clickRelativeX, float clickRelativeY, CGRect scanResult)
+        {
+            using (var ctx = new CGBitmapContext(IntPtr.Zero, imageToDecode.Width, imageToDecode.Height, imageToDecode.BitsPerComponent, imageToDecode.BytesPerRow, imageToDecode.ColorSpace, imageToDecode.BitmapInfo))
+            {
+                ctx.DrawImage(new CGRect(0, 0, imageToDecode.Width, imageToDecode.Height), imageToDecode);
+
+                ctx.SetStrokeColor(new CGColor(255, 0, 0, 0.6f));
+                ctx.SetFillColor(new CGColor(255, 0, 0, 0.4f));
+                ctx.SetLineJoin(CGLineJoin.Round);
+                ctx.SetLineWidth(4);
+
+                ctx.BeginPath();
+                ctx.MoveTo(scanResult.GetMinX(), scanResult.GetMinY());
+                ctx.AddLineToPoint(scanResult.GetMinX(), scanResult.GetMaxY());
+                ctx.AddLineToPoint(scanResult.GetMaxX(), scanResult.GetMaxY());
+                ctx.AddLineToPoint(scanResult.GetMaxX(), scanResult.GetMinY());
+                ctx.AddLineToPoint(scanResult.GetMinX(), scanResult.GetMinY());
+                ctx.ClosePath();
+                ctx.FillPath();
+                ctx.StrokePath();
+
+                ctx.SetFillColor(new CGColor(0, 255, 0, 0.4f));
+
+                ctx.BeginPath();
+                ctx.MoveTo(clickRelativeX - 25, clickRelativeY - 25);
+                ctx.AddLineToPoint(clickRelativeX - 25, clickRelativeY + 25);
+                ctx.AddLineToPoint(clickRelativeX + 25, clickRelativeY + 25);
+                ctx.AddLineToPoint(clickRelativeX + 25, clickRelativeY - 25);
+                ctx.AddLineToPoint(clickRelativeX - 25, clickRelativeY - 25);
+                ctx.ClosePath();
+                ctx.FillPath();
+                ctx.StrokePath();
+
+                var test = ctx.ToImage();
+                DebugHelperSaveImageToDisk(test);
+            }
         }
 
         #endregion
