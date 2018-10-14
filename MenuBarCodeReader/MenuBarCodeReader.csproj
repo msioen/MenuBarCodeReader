@@ -48,9 +48,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
-    <Reference Include="ZXingObjC.OSX.Binding">
-      <HintPath>..\packages\ZXingObjC.OSX.Binding.3.2.2.1\lib\xamarinmac20\ZXingObjC.OSX.Binding.dll</HintPath>
-    </Reference>
     <Reference Include="Sparkle">
       <HintPath>..\libraries\Sparkle.dll</HintPath>
     </Reference>
@@ -65,6 +62,10 @@
     </Reference>
     <Reference Include="HotKeyManager.Binding">
       <HintPath>..\packages\HotKeyManager.Binding.1.0.1\lib\xamarinmac20\HotKeyManager.Binding.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXingObjC.OSX.Binding">
+      <HintPath>..\packages\ZXingObjC.OSX.Binding.3.2.2.2\lib\xamarinmac20\ZXingObjC.OSX.Binding.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +87,7 @@
     <Folder Include="Resources\" />
     <Folder Include="Assets.xcassets\StatusBarIcon.imageset\" />
     <Folder Include="Model\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -111,8 +113,10 @@
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Utils\Settings.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\NotificationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="ScanWindow.xib" />
