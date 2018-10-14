@@ -204,9 +204,15 @@ namespace MenuBarCodeReader
         {
             if (scanResults != null)
             {
-                // we scanned something => paste to clipboard
-                NSPasteboard.GeneralPasteboard.ClearContents();
-                NSPasteboard.GeneralPasteboard.SetStringForType(scanResults, NSPasteboard.NSPasteboardTypeString);
+                var settings = new Settings();
+                if (settings.ShouldOutputScanResultsToClipboard)
+                {
+                    scanResults.SendToClipboard();
+                }
+                if (settings.ShouldOutputScanResultsToNotificationCenter)
+                {
+                    NotificationService.Instance.ShowNotification("Scan success", scanResults);
+                }
 
                 AnimateBackgroundAndClose(bounds, _green);
             }
@@ -255,6 +261,8 @@ namespace MenuBarCodeReader
             }
             else
             {
+                if (error != null)
+                    NotificationService.Instance.ShowNotification("Scan failed", error.LocalizedDescription);
                 return null;
             }
         }
@@ -274,7 +282,11 @@ namespace MenuBarCodeReader
             var detector = new ZXMultiDetector(matrix);
             var detectorResults = detector.DetectMulti(null, out error);
             if (detectorResults == null)
+            {
+                if (error != null)
+                    NotificationService.Instance.ShowNotification("Scan failed", error.LocalizedDescription);
                 return (null, CGRect.Null);
+            }
 
             ZXDetectorResult bestResult = null;
             float currDistance = float.MaxValue;
@@ -324,6 +336,8 @@ namespace MenuBarCodeReader
             }
             else
             {
+                if (error != null)
+                    NotificationService.Instance.ShowNotification("Scan failed", error.LocalizedDescription);
                 return (null, CGRect.Null);
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using AppKit;
 using Foundation;
 using ShortcutRecorder;
 
@@ -15,6 +16,12 @@ namespace MenuBarCodeReader
             var keyModifierOptions = new NSMutableDictionary();
             keyModifierOptions.SetValueForKey(new SRKeyEquivalentModifierMaskTransformer(), ShortcutRecorder.Constants.NSValueTransformerBindingOption);
             target.Bind("keyEquivalentModifierMask", observable, keyPath, keyModifierOptions);
+        }
+
+        public static void SendToClipboard(this string text)
+        {
+            NSPasteboard.GeneralPasteboard.ClearContents();
+            NSPasteboard.GeneralPasteboard.SetStringForType(text, NSPasteboard.NSPasteboardTypeString);
         }
     }
 }
