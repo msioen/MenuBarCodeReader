@@ -82,6 +82,9 @@
     <ImageAsset Include="Assets.xcassets\StatusBarIcon.imageset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\StatusBarIcon.imageset\StatusBarIcon.png" />
     <ImageAsset Include="Assets.xcassets\StatusBarIcon.imageset\StatusBarIcon%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\HelpIcon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\HelpIcon.imageset\StatusBarIcon-128png.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\HelpIcon.imageset\StatusBarIcon-256.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -117,11 +120,20 @@
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\NotificationService.cs" />
+    <Compile Include="PreferenceWindow.cs" />
+    <Compile Include="PreferenceWindow.designer.cs">
+      <DependentUpon>PreferenceWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PreferenceWindowController.cs" />
+    <Compile Include="PreferenceWindowController.designer.cs">
+      <DependentUpon>PreferenceWindowController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="ScanWindow.xib" />
     <InterfaceDefinition Include="ScanView.xib" />
     <InterfaceDefinition Include="Main.storyboard" />
+    <InterfaceDefinition Include="PreferenceWindow.xib" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="dsa_pub.pem" />

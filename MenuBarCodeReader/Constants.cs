@@ -13,6 +13,8 @@ namespace MenuBarCodeReader
         public static readonly NSString KEY_HOTKEY_ESC = new NSString("values.hotKeyEscape");
         public static readonly NSString KEY_HOTKEY_SCAN_CLICK = new NSString("values.hotKeyScanClick");
 
+        public static readonly NSString KEY_CHECKBOX_CHANGED = new NSString("cell.state");
+
         public const string SETTING_OUTPUT_CLIPBOARD = "SETTING_OUTPUT_CLIPBOARD";
         public const string SETTING_OUTPUT_NOTIFICATION = "SETTING_OUTPUT_NOTIFICATION";
     }
