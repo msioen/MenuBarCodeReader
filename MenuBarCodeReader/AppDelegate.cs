@@ -64,7 +64,7 @@ namespace MenuBarCodeReader
             menu.AddItem(scanClickItem);
 
             menu.AddItem(NSMenuItem.SeparatorItem);
-            //menu.AddItem(new NSMenuItem("Preferences", OnPreferences)); // TODO
+            menu.AddItem(new NSMenuItem("Preferences", OnPreferences));
             menu.AddItem(new NSMenuItem("Check for updates", OnCheckForUpdates));
             menu.AddItem(new NSMenuItem("Quit", OnQuit));
             _statusItem.Menu = menu;
@@ -129,7 +129,8 @@ namespace MenuBarCodeReader
 
         void OnPreferences(object sender, EventArgs e)
         {
-            // TODO => preference window
+            var preferenceWindowController = new PreferenceWindowController();
+            preferenceWindowController.ShowWindow(this);
         }
 
         void OnCheckForUpdates(object sender, EventArgs e)
