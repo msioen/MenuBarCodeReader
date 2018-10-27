@@ -7,9 +7,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>be.michielsioen.MenuBarCodeReader</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>2.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.11</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -35,6 +35,6 @@
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>SUFeedURL</key>
-	<string>https://github.com/msioen/MenuBarCodeReader/tree/master/release/appcast.xml</string>
+	<string>https://raw.github.com/msioen/MenuBarCodeReader/master/release/appcast.xml</string>
 </dict>
 </plist>
