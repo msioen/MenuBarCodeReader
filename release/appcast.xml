@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="yes"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>MenuBarCodeReader Changelog</title>
+    <link>https://raw.github.com/msioen/MenuBarCodeReader/master/release/appcast.xml</link>
+    <language>en</language>
+    <item>
+      <title>MenuBarCodeReader version 2.0</title>
+      <sparkle:releaseNotesLink>
+        http://htmlpreview.github.com/?https://raw.github.com/msioen/MenuBarCodeReader/master/release/release-notes-2.0.html
+      </sparkle:releaseNotesLink>
+      <pubDate>Sun, 11 Mar 2018 20:53:17 +0100</pubDate>
+      <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
+      <enclosure url="https://github.com/msioen/MenuBarCodeReader/releases/download/2.0/MenuBarCodeReader-2.0.zip" sparkle:version="2" sparkle:shortVersionString="2.0" length="6943948" type="application/octet-stream" sparkle:dsaSignature="MC0CFBdkJ2MO06gScA4CoyILNCDyrQtZAhUAjZrd/ggcWbfjjsKiFxLIgRBQ58Y="/>
+    </item>
+  </channel>
+</rss>
