@@ -6,9 +6,7 @@
     <language>en</language>
     <item>
       <title>MenuBarCodeReader version 2.0</title>
-      <sparkle:releaseNotesLink>
-        https://htmlpreview.github.io/?https://raw.github.com/msioen/MenuBarCodeReader/master/release/release-notes-2.0.html
-      </sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>https://michielsioen.be/menubarcodereader/release-notes-2.0.html</sparkle:releaseNotesLink>
       <pubDate>Sat, 27 Oct 2018 17:12:27 +0200</pubDate>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
       <enclosure url="https://github.com/msioen/MenuBarCodeReader/releases/download/2.0/MenuBarCodeReader-2.0.zip" sparkle:version="2" sparkle:shortVersionString="2.0" length="6943948" type="application/octet-stream" sparkle:dsaSignature="MC0CFBdkJ2MO06gScA4CoyILNCDyrQtZAhUAjZrd/ggcWbfjjsKiFxLIgRBQ58Y="/>
