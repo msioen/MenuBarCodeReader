@@ -15,14 +15,14 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" animationBehavior="default" id="2" customClass="PreferenceWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <rect key="contentRect" x="131" y="74" width="483" height="289"/>
+            <rect key="contentRect" x="131" y="74" width="483" height="384"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
             <view key="contentView" id="3">
-                <rect key="frame" x="0.0" y="0.0" width="483" height="289"/>
+                <rect key="frame" x="0.0" y="0.0" width="483" height="384"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HFo-KV-Tc4">
-                        <rect key="frame" x="20" y="210" width="54" height="59"/>
+                        <rect key="frame" x="20" y="305" width="54" height="59"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="59" id="WDb-4L-41D"/>
                             <constraint firstAttribute="width" constant="54" id="ZyY-qZ-gKh"/>
@@ -30,7 +30,7 @@
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="HelpIcon" id="OCy-rM-jxH"/>
                     </imageView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ehx-lz-Ge3">
-                        <rect key="frame" x="92" y="229" width="168" height="21"/>
+                        <rect key="frame" x="92" y="324" width="168" height="21"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="MenuBarCodeReader" id="SqL-d7-NZt">
                             <font key="font" metaFont="system" size="17"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -38,7 +38,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c6L-xG-PGV">
-                        <rect key="frame" x="18" y="173" width="69" height="17"/>
+                        <rect key="frame" x="18" y="268" width="69" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Shortcuts" id="ip9-BN-7gM">
                             <font key="font" metaFont="systemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -46,7 +46,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gUj-f0-LOy">
-                        <rect key="frame" x="18" y="75" width="85" height="17"/>
+                        <rect key="frame" x="18" y="170" width="85" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Scan results" id="s97-Y3-Yri">
                             <font key="font" metaFont="systemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -54,21 +54,21 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yff-Xh-7Ie">
-                        <rect key="frame" x="30" y="47" width="206" height="18"/>
+                        <rect key="frame" x="30" y="142" width="206" height="18"/>
                         <buttonCell key="cell" type="check" title="Copy scan results to clipboard" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="fbi-m7-EC6">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dyN-x0-pXC">
-                        <rect key="frame" x="30" y="18" width="273" height="18"/>
+                        <rect key="frame" x="30" y="113" width="273" height="18"/>
                         <buttonCell key="cell" type="check" title="Publish scan results to notification center" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="AWu-u2-JKS">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Abf-ox-7Wa">
-                        <rect key="frame" x="18" y="-17" width="55" height="17"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Abf-ox-7Wa">
+                        <rect key="frame" x="18" y="78" width="55" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="General" id="bC7-uH-Qun">
                             <font key="font" metaFont="systemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -76,21 +76,21 @@
                         </textFieldCell>
                     </textField>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="SKl-3h-bXN" customClass="SRRecorderControl">
-                        <rect key="frame" x="136" y="140" width="250" height="25"/>
+                        <rect key="frame" x="136" y="235" width="250" height="25"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="250" id="old-Fs-ahS"/>
                             <constraint firstAttribute="height" constant="25" id="sYr-zP-G8X"/>
                         </constraints>
                     </customView>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="76p-pU-8Ey" customClass="SRRecorderControl">
-                        <rect key="frame" x="136" y="108" width="250" height="25"/>
+                        <rect key="frame" x="136" y="203" width="250" height="25"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="KVJ-yN-ZYe"/>
                             <constraint firstAttribute="width" constant="250" id="dd5-mq-tuW"/>
                         </constraints>
                     </customView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VxZ-LJ-cRY">
-                        <rect key="frame" x="30" y="144" width="88" height="17"/>
+                        <rect key="frame" x="30" y="239" width="88" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Scan - select:" id="Id6-BK-3H3">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -98,18 +98,29 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ung-lk-05u">
-                        <rect key="frame" x="30" y="112" width="88" height="17"/>
+                        <rect key="frame" x="30" y="207" width="88" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Scan - click:" id="A49-PU-Xy9">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kks-FI-g1Q">
+                        <rect key="frame" x="30" y="50" width="217" height="18"/>
+                        <buttonCell key="cell" type="check" title="Automatically check for updates" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="hMl-RC-Srq">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="v9H-Jw-WEq" name="value" keyPath="automaticallyChecksForUpdates" id="tvZ-rJ-t6d"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="yff-Xh-7Ie" firstAttribute="top" secondItem="gUj-f0-LOy" secondAttribute="bottom" constant="12" id="0SZ-ik-VDM"/>
                     <constraint firstItem="Abf-ox-7Wa" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" id="2lX-qu-4rC"/>
                     <constraint firstItem="SKl-3h-bXN" firstAttribute="centerY" secondItem="VxZ-LJ-cRY" secondAttribute="centerY" id="5EB-QH-6K5"/>
+                    <constraint firstItem="Kks-FI-g1Q" firstAttribute="top" secondItem="Abf-ox-7Wa" secondAttribute="bottom" constant="12" id="6iL-fE-jrT"/>
                     <constraint firstItem="76p-pU-8Ey" firstAttribute="leading" secondItem="ung-lk-05u" secondAttribute="trailing" constant="20" id="AyV-OJ-Z3Y"/>
                     <constraint firstItem="gUj-f0-LOy" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" id="ECR-Yh-SR2"/>
                     <constraint firstItem="HFo-KV-Tc4" firstAttribute="top" secondItem="3" secondAttribute="top" constant="20" id="FTr-Jz-B0a"/>
@@ -130,6 +141,7 @@
                     <constraint firstItem="Ehx-lz-Ge3" firstAttribute="leading" secondItem="HFo-KV-Tc4" secondAttribute="trailing" constant="20" id="kK8-mf-XDR"/>
                     <constraint firstItem="yff-Xh-7Ie" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="32" id="lpA-ej-aGc"/>
                     <constraint firstItem="ung-lk-05u" firstAttribute="top" secondItem="VxZ-LJ-cRY" secondAttribute="bottom" constant="15" id="sJT-dK-VRh"/>
+                    <constraint firstItem="Kks-FI-g1Q" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="32" id="sMF-Y6-Y1f"/>
                 </constraints>
             </view>
             <connections>
@@ -138,8 +150,10 @@
                 <outlet property="WdgRecorderScanClick" destination="76p-pU-8Ey" id="nVL-ik-7DO"/>
                 <outlet property="WdgRecorderScanSelect" destination="SKl-3h-bXN" id="QBu-WB-chF"/>
             </connections>
-            <point key="canvasLocation" x="77.5" y="128.5"/>
+            <point key="canvasLocation" x="77.5" y="176"/>
         </window>
+        <customObject id="v9H-Jw-WEq" customClass="SUUpdater"/>
+        <userDefaultsController representsSharedInstance="YES" id="adn-Ff-Njp"/>
     </objects>
     <resources>
         <image name="HelpIcon" width="768" height="768"/>
