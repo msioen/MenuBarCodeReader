@@ -15,10 +15,10 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" animationBehavior="default" id="2" customClass="PreferenceWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <rect key="contentRect" x="131" y="74" width="606" height="289"/>
+            <rect key="contentRect" x="131" y="74" width="483" height="289"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
             <view key="contentView" id="3">
-                <rect key="frame" x="0.0" y="0.0" width="606" height="289"/>
+                <rect key="frame" x="0.0" y="0.0" width="483" height="289"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HFo-KV-Tc4">
@@ -30,7 +30,7 @@
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="HelpIcon" id="OCy-rM-jxH"/>
                     </imageView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ehx-lz-Ge3">
-                        <rect key="frame" x="92" y="230" width="168" height="21"/>
+                        <rect key="frame" x="92" y="229" width="168" height="21"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="MenuBarCodeReader" id="SqL-d7-NZt">
                             <font key="font" metaFont="system" size="17"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -67,7 +67,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Abf-ox-7Wa">
+                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Abf-ox-7Wa">
                         <rect key="frame" x="18" y="-17" width="55" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="General" id="bC7-uH-Qun">
                             <font key="font" metaFont="systemBold"/>
@@ -83,7 +83,7 @@
                         </constraints>
                     </customView>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="76p-pU-8Ey" customClass="SRRecorderControl">
-                        <rect key="frame" x="127" y="108" width="250" height="25"/>
+                        <rect key="frame" x="136" y="108" width="250" height="25"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="KVJ-yN-ZYe"/>
                             <constraint firstAttribute="width" constant="250" id="dd5-mq-tuW"/>
@@ -98,7 +98,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ung-lk-05u">
-                        <rect key="frame" x="30" y="112" width="79" height="17"/>
+                        <rect key="frame" x="30" y="112" width="88" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Scan - click:" id="A49-PU-Xy9">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -108,6 +108,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="yff-Xh-7Ie" firstAttribute="top" secondItem="gUj-f0-LOy" secondAttribute="bottom" constant="12" id="0SZ-ik-VDM"/>
+                    <constraint firstItem="Abf-ox-7Wa" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" id="2lX-qu-4rC"/>
                     <constraint firstItem="SKl-3h-bXN" firstAttribute="centerY" secondItem="VxZ-LJ-cRY" secondAttribute="centerY" id="5EB-QH-6K5"/>
                     <constraint firstItem="76p-pU-8Ey" firstAttribute="leading" secondItem="ung-lk-05u" secondAttribute="trailing" constant="20" id="AyV-OJ-Z3Y"/>
                     <constraint firstItem="gUj-f0-LOy" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" id="ECR-Yh-SR2"/>
@@ -122,6 +123,7 @@
                     <constraint firstItem="SKl-3h-bXN" firstAttribute="leading" secondItem="VxZ-LJ-cRY" secondAttribute="trailing" constant="20" id="V9Q-w2-p5a"/>
                     <constraint firstItem="c6L-xG-PGV" firstAttribute="top" secondItem="HFo-KV-Tc4" secondAttribute="bottom" constant="20" id="Wvo-kY-UFN"/>
                     <constraint firstItem="HFo-KV-Tc4" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" id="Y7N-Yl-iZA"/>
+                    <constraint firstItem="76p-pU-8Ey" firstAttribute="leading" secondItem="SKl-3h-bXN" secondAttribute="leading" id="apd-VZ-7G0"/>
                     <constraint firstItem="c6L-xG-PGV" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" id="bU4-R0-Nui"/>
                     <constraint firstItem="76p-pU-8Ey" firstAttribute="centerY" secondItem="ung-lk-05u" secondAttribute="centerY" id="hkm-XQ-EdL"/>
                     <constraint firstItem="dyN-x0-pXC" firstAttribute="top" secondItem="yff-Xh-7Ie" secondAttribute="bottom" constant="15" id="k7Y-PZ-Ykg"/>
@@ -136,7 +138,7 @@
                 <outlet property="WdgRecorderScanClick" destination="76p-pU-8Ey" id="nVL-ik-7DO"/>
                 <outlet property="WdgRecorderScanSelect" destination="SKl-3h-bXN" id="QBu-WB-chF"/>
             </connections>
-            <point key="canvasLocation" x="139" y="128.5"/>
+            <point key="canvasLocation" x="77.5" y="128.5"/>
         </window>
     </objects>
     <resources>

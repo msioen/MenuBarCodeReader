@@ -55,7 +55,11 @@ namespace MenuBarCodeReader
             base.Close();
         }
 
-        public void OnCloseRequested(NSNotification notification)
+        #endregion
+
+        #region Private
+
+        void OnCloseRequested(NSNotification notification)
         {
             Close();
         }
