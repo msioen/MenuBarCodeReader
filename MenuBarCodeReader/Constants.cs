@@ -17,5 +17,8 @@ namespace MenuBarCodeReader
 
         public const string SETTING_OUTPUT_CLIPBOARD = "SETTING_OUTPUT_CLIPBOARD";
         public const string SETTING_OUTPUT_NOTIFICATION = "SETTING_OUTPUT_NOTIFICATION";
+
+        public const string NOTIFICATION_BIND_GLOBAL_SHORTCUTS = "notificationBindGlobalShortcuts";
+        public const string NOTIFICATION_UNBIND_GLOBAL_SHORTCUTS = "notificationUnbindGlobalShortcuts";
     }
 }

@@ -128,6 +128,7 @@
     <Compile Include="PreferenceWindowController.designer.cs">
       <DependentUpon>PreferenceWindowController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ShortcutRecorderDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="ScanWindow.xib" />

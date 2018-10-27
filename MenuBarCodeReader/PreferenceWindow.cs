@@ -2,12 +2,16 @@
 
 using Foundation;
 using AppKit;
+using ShortcutRecorder;
 
 namespace MenuBarCodeReader
 {
-    public partial class PreferenceWindow : NSWindow
+    public partial class PreferenceWindow : NSWindow, ISRValidatorDelegate
     {
         Settings _settings;
+
+        SRValidator _validator;
+        ShortcutRecorderDelegate _controlDelegate;
 
         IDisposable _btnResultsClipboardObserver;
         IDisposable _btnResultsNotificationCenterObserver;
@@ -31,12 +35,24 @@ namespace MenuBarCodeReader
         {
             base.AwakeFromNib();
 
+            // ensure we can safely change shortcuts without executing other bound actions
+            UnbindGlobalShortcuts();
+
             Level = NSWindowLevel.ModalPanel;
             NSWindow.Notifications.ObserveWillClose(OnClose);
 
             _settings = new Settings();
 
-            // setup shortcut recorder
+            // setup shortcut recorders
+            _validator = new SRValidator(this);
+            _controlDelegate = new ShortcutRecorderDelegate(_validator, x => PresentError(x));
+
+            WdgRecorderScanSelect.Delegate = _controlDelegate;
+            WdgRecorderScanClick.Delegate = _controlDelegate;
+
+            var defaults = NSUserDefaultsController.SharedUserDefaultsController;
+            WdgRecorderScanSelect.Bind(ShortcutRecorder.Constants.NSValueBinding, defaults, Constants.KEY_HOTKEY_SCAN_SELECT, null);
+            WdgRecorderScanClick.Bind(ShortcutRecorder.Constants.NSValueBinding, defaults, Constants.KEY_HOTKEY_SCAN_CLICK, null);
 
             // setup settings
             BtnResultsClipboard.State = _settings.ShouldOutputScanResultsToClipboard ? NSCellStateValue.On : NSCellStateValue.Off;
@@ -48,7 +64,59 @@ namespace MenuBarCodeReader
 
         #endregion
 
+        #region ISRValidatorDelegate
+
+        public bool ShortcutValidator(SRValidator aValidator, ushort aKeyCode, NSEventModifierMask aFlags, out string outReason)
+        {
+            outReason = string.Empty;
+
+            if (!(FirstResponder is SRRecorderControl recorder))
+                return false;
+
+            var shortcut = CFunctions.SRShortcutWithCocoaModifierFlagsAndKeyCode(aFlags, aKeyCode);
+            if (IsTaken(WdgRecorderScanSelect, shortcut) ||
+                IsTaken(WdgRecorderScanClick, shortcut))
+            {
+                outReason = "it's already used. To use this shortcut, first remove or change the other shortcut";
+                return true;
+            }
+
+            return false;
+        }
+
+        bool IsTaken(SRRecorderControl recorder, NSDictionary shortcut)
+        {
+            return CFunctions.SRShortcutEqualToShortcut(shortcut, recorder.ObjectValue);
+        }
+
+        public bool ShortcutValidatorShouldCheckMenu(SRValidator aValidator)
+        {
+            return true;
+        }
+
+        public bool ShortcutValidatorShouldCheckSystemShortcuts(SRValidator aValidator)
+        {
+            return false;
+        }
+
+        public bool ShortcutValidatorShouldUseASCIIStringForKeyCodes(SRValidator aValidator)
+        {
+            return false;
+        }
+
+        #endregion
+
         #region Private
+
+        void BindGlobalShortcuts()
+        {
+            NSNotificationCenter.DefaultCenter.PostNotificationName(Constants.NOTIFICATION_BIND_GLOBAL_SHORTCUTS, null);
+        }
+
+        void UnbindGlobalShortcuts()
+        {
+            NSNotificationCenter.DefaultCenter.PostNotificationName(Constants.NOTIFICATION_UNBIND_GLOBAL_SHORTCUTS, null);
+        }
 
         void OnCheckboxChanged(NSObservedChange obj)
         {
@@ -60,6 +128,8 @@ namespace MenuBarCodeReader
         {
             _btnResultsClipboardObserver?.Dispose();
             _btnResultsNotificationCenterObserver?.Dispose();
+
+            BindGlobalShortcuts();
         }
 
         #endregion
