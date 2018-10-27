@@ -65,6 +65,8 @@ namespace MenuBarCodeReader
 
             NeedsDisplay = true;
             DisplayIfNeeded();
+
+            NSCursor.CrosshairCursor.Set();
         }
 
         public override void MouseUp(NSEvent theEvent)
@@ -83,6 +85,7 @@ namespace MenuBarCodeReader
             NeedsDisplay = true;
             DisplayIfNeeded();
 
+            NSCursor.ArrowCursor.Set();
             Scan(bounds);
         }
 
