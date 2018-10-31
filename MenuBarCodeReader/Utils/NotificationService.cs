@@ -34,7 +34,6 @@ namespace MenuBarCodeReader
             else
             {
                 NSUserNotificationCenter.DefaultUserNotificationCenter.ShouldPresentNotification = DefaultUserNotificationCenter_ShouldPresentNotification;
-                //NSUserNotificationCenter.DefaultUserNotificationCenter.Delegate = this;
                 NSUserNotificationCenter.DefaultUserNotificationCenter.DidActivateNotification += DefaultUserNotificationCenter_DidActivateNotification;
             }
         }
@@ -61,8 +60,11 @@ namespace MenuBarCodeReader
 
         bool UseUserNotificationsFramework()
         {
-            var tmp = NSProcessInfo.ProcessInfo.OperatingSystemVersion;
-            return NSProcessInfo.ProcessInfo.IsOperatingSystemAtLeastVersion(new NSOperatingSystemVersion(10, 14, 0));
+            // UserNotifications Fraework doesn't seem up to par yet with normal notifications:
+            // => approval doesn't work properly
+            // => shown notifications don't have a sound and don't animate - only popup in the notification center
+            return false;
+            //return NSProcessInfo.ProcessInfo.IsOperatingSystemAtLeastVersion(new NSOperatingSystemVersion(10, 14, 0));
         }
 
         void ShowNotificationWithNSUserNotifications(string title, string text)
@@ -77,11 +79,14 @@ namespace MenuBarCodeReader
         // macOS 10.14 - Mojave introduces UserNotifications framework
         void ShowNotificationWithUserNotifications(string title, string text)
         {
+            // TODO? UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert, (granted, error) =>
+
+
             var notificationContent = new UNMutableNotificationContent();
             notificationContent.Title = title;
             notificationContent.Body = text;
 
-            var notificationTrigger = UNTimeIntervalNotificationTrigger.CreateTrigger(0, false);
+            var notificationTrigger = UNTimeIntervalNotificationTrigger.CreateTrigger(1, false);
             var notificationRequest = UNNotificationRequest.FromIdentifier(IDENTIFIER, notificationContent, notificationTrigger);
 
             UNUserNotificationCenter.Current.AddNotificationRequest(notificationRequest, x => { });
