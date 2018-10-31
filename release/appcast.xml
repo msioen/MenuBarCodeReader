@@ -9,7 +9,7 @@
       <sparkle:releaseNotesLink>https://michielsioen.be/menubarcodereader/release-notes.html</sparkle:releaseNotesLink>
       <pubDate>Wed, 31 Oct 2018 17:38:28 +0100</pubDate>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
-      <enclosure url="https://github.com/msioen/MenuBarCodeReader/releases/download/2.0/MenuBarCodeReader-2.1.zip" sparkle:version="3" sparkle:shortVersionString="2.1" length="6942233" type="application/octet-stream" sparkle:dsaSignature="MC0CFE0vx3Zav+/FSwW0NEgXx58xOtrUAhUA4dLUzQMJ4BamZcl+2A5HOeCDeLA="/>
+      <enclosure url="https://github.com/msioen/MenuBarCodeReader/releases/download/2.1/MenuBarCodeReader-2.1.zip" sparkle:version="3" sparkle:shortVersionString="2.1" length="6942233" type="application/octet-stream" sparkle:dsaSignature="MC0CFE0vx3Zav+/FSwW0NEgXx58xOtrUAhUA4dLUzQMJ4BamZcl+2A5HOeCDeLA="/>
     </item>
   </channel>
 </rss>
