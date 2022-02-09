@@ -179,7 +179,9 @@ namespace MenuBarCodeReader
             IntPtr imageRef = CGWindowListCreateImage(screenBounds, CGWindowListOption.OnScreenBelowWindow, (uint)Window.WindowNumber, CGWindowImageOption.Default);
             var cgImage = new CGImage(imageRef);
 
+#if DEBUG
             //DebugHelperSaveImageToDisk(cgImage);
+#endif
 
             var scanResults = DecodeImage(cgImage);
             HandleDecodeResults(bounds, scanResults);
@@ -195,7 +197,9 @@ namespace MenuBarCodeReader
             IntPtr imageRef = CGWindowListCreateImage(rect, CGWindowListOption.OnScreenBelowWindow, (uint)Window.WindowNumber, CGWindowImageOption.Default);
             var cgImage = new CGImage(imageRef);
 
+#if DEBUG
             //DebugHelperSaveImageToDisk(cgImage, "screen.png");
+#endif
 
             bounds.Inflate(50, 50);
 
@@ -324,7 +328,9 @@ namespace MenuBarCodeReader
             var scanResult = CGRectFlipped(new CGRect(x, y, width, height), new CGRect(0, 0, imageToDecode.Width, imageToDecode.Height));
             scanResult.Inflate(50, -50);
 
-            DebugHelperDrawScanResult(imageToDecode, clickRelativeX, clickRelativeY, scanResult);
+#if DEBUG
+            //DebugHelperDrawScanResult(imageToDecode, clickRelativeX, clickRelativeY, scanResult);
+#endif
 
             x = (float)(scanResult.X / imageToDecode.Width * NSScreen.MainScreen.Frame.Width);
             y = (float)((scanResult.Y + scanResult.Height) / imageToDecode.Height * boundsHeight);
@@ -350,6 +356,7 @@ namespace MenuBarCodeReader
             return ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
         }
 
+#if DEBUG
         static void DebugHelperSaveImageToDisk(CGImage cgImage, string filename = "scanned.png")
         {
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), filename);
@@ -396,6 +403,7 @@ namespace MenuBarCodeReader
                 DebugHelperSaveImageToDisk(test);
             }
         }
+#endif
 
         #endregion
     }

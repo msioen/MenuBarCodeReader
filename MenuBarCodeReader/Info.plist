@@ -7,7 +7,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>be.michielsioen.MenuBarCodeReader</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.1</string>
+	<string>2.2</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.11</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -35,6 +35,6 @@
 	<key>SUFeedURL</key>
 	<string>https://raw.github.com/msioen/MenuBarCodeReader/master/release/appcast.xml</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 </dict>
 </plist>

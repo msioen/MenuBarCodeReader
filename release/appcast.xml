@@ -5,11 +5,11 @@
     <link>https://raw.github.com/msioen/MenuBarCodeReader/master/release/appcast.xml</link>
     <language>en</language>
     <item>
-      <title>MenuBarCodeReader version 2.1</title>
+      <title>MenuBarCodeReader version 2.2</title>
       <sparkle:releaseNotesLink>https://michielsioen.be/menubarcodereader/release-notes.html</sparkle:releaseNotesLink>
-      <pubDate>Wed, 31 Oct 2018 17:38:28 +0100</pubDate>
+      <pubDate>Wed, 09 Feb 2022 21:31:10 +0100</pubDate>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
-      <enclosure url="https://github.com/msioen/MenuBarCodeReader/releases/download/2.1/MenuBarCodeReader-2.1.zip" sparkle:version="3" sparkle:shortVersionString="2.1" length="6942233" type="application/octet-stream" sparkle:dsaSignature="MC0CFE0vx3Zav+/FSwW0NEgXx58xOtrUAhUA4dLUzQMJ4BamZcl+2A5HOeCDeLA="/>
+      <enclosure url="https://github.com/msioen/MenuBarCodeReader/releases/download/2.1/MenuBarCodeReader-2.2.zip" sparkle:version="4" sparkle:shortVersionString="2.2" length="6779737" type="application/octet-stream" sparkle:dsaSignature="MC4CFQC3fkLfkk8Kl4U4ih4M+shsiliJqQIVAOJXderSujQcw5otsy9ia3OXgWNF"/>
     </item>
   </channel>
 </rss>

@@ -21,6 +21,7 @@ namespace MenuBarCodeReader
 
         JFHotkeyManager _hotkeyManager;
         Dictionary<NSString, nuint> _hotkeyBindings = new Dictionary<NSString, nuint>();
+        nuint _escHotkeyBinding;
 
         NSObject _bindObserver;
         NSObject _unbindObserver;
@@ -144,9 +145,6 @@ namespace MenuBarCodeReader
             if (_hotkeyManager == null || _shortcutsBound)
                 return;
 
-            // escape hotkey should stop scan selection
-            _hotkeyBindings.Add(Constants.KEY_HOTKEY_ESC, _hotkeyManager.BindKeyRef(53, 0, this, new ObjCRuntime.Selector("onEscape")));
-
             var currSelectHotKey = NSUserDefaults.StandardUserDefaults.ValueForKey(Constants.VALUE_HOTKEY_SCAN_SELECT);
             if (currSelectHotKey != null)
             {
@@ -187,10 +185,28 @@ namespace MenuBarCodeReader
             _statusItem.Menu.Items[1].Enabled = false;
         }
 
+        void BindEscKey()
+        {
+            if (_hotkeyManager == null)
+                return;
+
+            // escape hotkey should stop scan selection
+            _escHotkeyBinding = _hotkeyManager.BindKeyRef(53, 0, this, new ObjCRuntime.Selector("onEscape"));
+        }
+
+        void UnbindEscKey()
+        {
+            if (_hotkeyManager == null && _escHotkeyBinding != default)
+                return;
+
+            _hotkeyManager.Unbind(_escHotkeyBinding);
+        }
+
         [Export("onEscape")]
         void OnEscape()
         {
             NSNotificationCenter.DefaultCenter.PostNotificationName(ScanWindowController.NOTIFICATION_CLOSE, null);
+            UnbindEscKey();
         }
 
         [Export("onScanSelect")]
@@ -217,9 +233,19 @@ namespace MenuBarCodeReader
 
         void OnScan(EScanMode scanMode)
         {
+            BindEscKey();
+
             ScanView.ScanMode = scanMode;
             var scanWindowController = new ScanWindowController();
             scanWindowController.ShowWindow(this);
+
+            scanWindowController.Window.WillClose += Window_WillClose;
+
+            void Window_WillClose(object sender, EventArgs e)
+            {
+                scanWindowController.Window.WillClose -= Window_WillClose;
+                UnbindEscKey();
+            }
         }
 
         void OnPreferences(object sender, EventArgs e)

@@ -24,6 +24,9 @@ v2.0
 v2.1
 - fixed some issues on macOS Mojave
 
+v2.2
+- fixed escape key being bound when not necessary
+
 
 
 Icons made by [Pixel perfect](https://www.flaticon.com/authors/pixel-perfect) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
